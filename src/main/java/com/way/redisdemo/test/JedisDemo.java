@@ -15,18 +15,21 @@ public class JedisDemo {
     @Autowired
     RedisTemplate<String,String> redisTemplate;
 
-    @Autowired
-    Jedis jedis = jedisPool.getResource();
+
 
     @GetMapping("/{key}")
     public String getValue(@PathVariable(value = "key") String key){
+        Jedis jedis = jedisPool.getResource();
+        jedis.close();
         return jedis.get(key);
     }
 
 
     @PostMapping("/{key}/{value}")
     public String setValue(@PathVariable(value = "key") String key,@PathVariable(value = "value") String value){
+        Jedis jedis = jedisPool.getResource();
         String result = jedis.set(key, value);
+        jedis.close();
         return result;
     }
 
